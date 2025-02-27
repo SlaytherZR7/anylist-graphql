@@ -52,7 +52,9 @@ export class AuthService {
     return user;
   }
 
-  revalidateToken() {
-    throw new Error('Method not implemented.');
+  revalidateToken(user: User) {
+    const token = this.getJwtToken(user.id);
+
+    return { token, user };
   }
 }
