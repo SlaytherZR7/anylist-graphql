@@ -8,9 +8,10 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
-import { UpdateUserInput } from './dto/update-user.input';
+import { UpdateUserInput } from './dto/inputs/update-user.input';
 import { User } from './entities/user.entity';
 import { SignupInput } from 'src/auth/dto/inputs/signup.input';
+import { ValidRoles } from 'src/auth/enums/valid-roles.enum';
 
 @Injectable()
 export class UsersService {
@@ -31,8 +32,14 @@ export class UsersService {
     }
   }
 
-  findAll(): Promise<User[]> {
-    return [{}];
+  findAll(roles: ValidRoles[]): Promise<User[]> {
+    if (roles.length === 0) return this.usersRepository.find();
+
+    return this.usersRepository
+      .createQueryBuilder()
+      .andWhere('ARRAY[roles] && ARRAY[:...roles]')
+      .setParameter('roles', roles)
+      .getMany();
   }
 
   async findOneById(id: string): Promise<User> {
