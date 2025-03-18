@@ -33,7 +33,12 @@ export class ItemsService {
     return item;
   }
 
-  async update(id: string, updateItemInput: UpdateItemInput): Promise<Item> {
+  async update(
+    id: string,
+    updateItemInput: UpdateItemInput,
+    user: User,
+  ): Promise<Item> {
+    await this.findOne(id, user);
     const item = await this.itemsRepository.preload(updateItemInput);
     if (!item) throw new NotFoundException(`Item with id: ${id} not found`);
     return await this.itemsRepository.save(item);
