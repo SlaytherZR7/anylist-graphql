@@ -1,4 +1,8 @@
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
-export class SeedService {}
+export class SeedService {
+  async seed(): Promise<boolean> {
+    return true;
+  }
+}
