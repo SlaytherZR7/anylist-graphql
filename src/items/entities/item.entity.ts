@@ -17,7 +17,7 @@ export class Item {
   @Field(() => String, { nullable: true })
   quantityUnits?: string;
 
-  @ManyToOne(() => User, (user) => user.items)
+  @ManyToOne(() => User, (user) => user.items, {nullable: false})
   @Field(() => User)
   user: User;
 }
