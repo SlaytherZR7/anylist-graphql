@@ -20,10 +20,10 @@ export class UsersResolver {
     return this.usersService.findAll(validRoles.roles);
   }
 
-  // @Query(() => User, { name: 'user' })
-  // findOne(@Args('id', { type: () => ID }) id: string): Promise<User> {
-  //   return this.usersService.findOneByEmail(id);
-  // }
+  @Query(() => User, { name: 'user' })
+  findOne(@Args('id', { type: () => ID }) id: string): Promise<User> {
+    return this.usersService.findOneByEmail(id);
+  }
 
   // @Mutation(() => User)
   // blockUser(@Args('id', { type: () => ID }) id: string): Promise<User> {
