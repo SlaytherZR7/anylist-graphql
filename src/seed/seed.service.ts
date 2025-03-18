@@ -42,12 +42,12 @@ export class SeedService {
   }
 
   private async loadUsers(): Promise<User> {
-    const users: User[] = []
+    const users: User[] = [];
 
-    for(const user of SEED_USERS){
-      users.push(await this.userService.create(user))
+    for (const user of SEED_USERS) {
+      users.push(await this.userService.create(user));
     }
 
-    return users[0]
+    return users[0];
   }
 }
