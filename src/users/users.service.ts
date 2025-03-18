@@ -63,8 +63,13 @@ export class UsersService {
     return `This action updates a #${id} user`;
   }
 
-  block(id: string) {
-    return `This action removes a #${id} user`;
+  async block(id: string, adminUser: User): Promise<User> {
+    const userToBlock = await this.findOneById(id);
+
+    userToBlock.isActive = false;
+    userToBlock.lastUpdatedBy = adminUser;
+
+    return await this.usersRepository.save(userToBlock);
   }
 
   private handleDBError(error: any): never {
