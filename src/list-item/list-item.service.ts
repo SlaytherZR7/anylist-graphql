@@ -71,16 +71,17 @@ export class ListItemService {
   async update(id: string, updateListItemInput: UpdateListItemInput) {
     const { listId, itemId, ...rest } = updateListItemInput;
 
-    const queryBuilder = this.listItemsRepository.createQueryBuilder()
+    const queryBuilder = this.listItemsRepository
+      .createQueryBuilder()
       .update()
-      .set( rest )
+      .set(rest)
       .where('id = :id', { id });
 
-    if ( listId ) queryBuilder.set({ list: { id: listId } });
-    if ( itemId ) queryBuilder.set({ item: { id: itemId } });
+    if (listId) queryBuilder.set({ list: { id: listId } });
+    if (itemId) queryBuilder.set({ item: { id: itemId } });
 
     await queryBuilder.execute();
 
-    return this.findOne( id );
+    return this.findOne(id);
   }
 }
