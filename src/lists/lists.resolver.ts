@@ -1,4 +1,4 @@
-import { Resolver, Query, Mutation, Args, Int, ID } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args, ID } from '@nestjs/graphql';
 import { ListsService } from './lists.service';
 import { List } from './entities/list.entity';
 import { CreateListInput } from './dto/create-list.input';
@@ -7,9 +7,11 @@ import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
 import { User } from 'src/users/entities/user.entity';
 import { SearchArgs } from 'src/common/dto/args/search.args';
 import { PaginationArgs } from 'src/common/dto/args/pagination.args';
-import { ParseUUIDPipe } from '@nestjs/common';
+import { ParseUUIDPipe, UseGuards } from '@nestjs/common';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 
 @Resolver(() => List)
+@UseGuards(JwtAuthGuard)
 export class ListsResolver {
   constructor(private readonly listsService: ListsService) {}
 
