@@ -18,11 +18,6 @@ export class ListItemResolver {
     return this.listItemService.create(createListItemInput);
   }
 
-  @Query(() => [ListItem], { name: 'listItem' })
-  findAll() {
-    return this.listItemService.findAll();
-  }
-
   @Query(() => ListItem, { name: 'listItem' })
   findOne(@Args('id', { type: () => ID }, ParseUUIDPipe) id: string) {
     return this.listItemService.findOne(id);
@@ -36,10 +31,5 @@ export class ListItemResolver {
       updateListItemInput.id,
       updateListItemInput,
     );
-  }
-
-  @Mutation(() => ListItem)
-  removeListItem(@Args('id', { type: () => Int }) id: number) {
-    return this.listItemService.remove(id);
   }
 }
