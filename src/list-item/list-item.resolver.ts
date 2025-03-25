@@ -9,7 +9,9 @@ export class ListItemResolver {
   constructor(private readonly listItemService: ListItemService) {}
 
   @Mutation(() => ListItem)
-  createListItem(@Args('createListItemInput') createListItemInput: CreateListItemInput) {
+  createListItem(
+    @Args('createListItemInput') createListItemInput: CreateListItemInput,
+  ) {
     return this.listItemService.create(createListItemInput);
   }
 
@@ -24,8 +26,13 @@ export class ListItemResolver {
   }
 
   @Mutation(() => ListItem)
-  updateListItem(@Args('updateListItemInput') updateListItemInput: UpdateListItemInput) {
-    return this.listItemService.update(updateListItemInput.id, updateListItemInput);
+  updateListItem(
+    @Args('updateListItemInput') updateListItemInput: UpdateListItemInput,
+  ) {
+    return this.listItemService.update(
+      updateListItemInput.id,
+      updateListItemInput,
+    );
   }
 
   @Mutation(() => ListItem)
