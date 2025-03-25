@@ -18,6 +18,7 @@ import { PaginationArgs } from 'src/common/dto/args/pagination.args';
 import { ParseUUIDPipe, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { ListItemService } from 'src/list-item/list-item.service';
+import { ListItem } from 'src/list-item/entities/list-item.entity';
 
 @Resolver(() => List)
 @UseGuards(JwtAuthGuard)
@@ -66,6 +67,15 @@ export class ListsResolver {
     @CurrentUser() user: User,
   ) {
     return this.listsService.remove(id, user);
+  }
+
+  @ResolveField(() => [ListItem], { name: 'items' })
+  async getListItems(
+    @Parent() list: List,
+    @Args() paginationArgs: PaginationArgs,
+    @Args() searchArgs: SearchArgs,
+  ): Promise<ListItem[]> {
+    return this.listItemsService.findAll(list, paginationArgs, searchArgs);
   }
 
   @ResolveField(() => Number, { name: 'totalItems' })
