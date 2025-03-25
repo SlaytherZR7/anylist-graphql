@@ -4,6 +4,7 @@ import { UpdateListItemInput } from './dto/update-list-item.input';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ListItem } from './entities/list-item.entity';
 import { Repository } from 'typeorm';
+import { List } from 'src/lists/entities/list.entity';
 
 @Injectable()
 export class ListItemService {
@@ -24,6 +25,12 @@ export class ListItemService {
     await this.listItemsRepository.save(newListItem);
 
     return this.findOne(newListItem.id);
+  }
+
+  async countListItemsByList(list: List): Promise<number> {
+    return this.listItemsRepository.count({
+      where: { list: { id: list.id } },
+    });
   }
 
   findAll() {
