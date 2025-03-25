@@ -1,19 +1,42 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateListItemInput } from './dto/create-list-item.input';
 import { UpdateListItemInput } from './dto/update-list-item.input';
+import { InjectRepository } from '@nestjs/typeorm';
+import { ListItem } from './entities/list-item.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class ListItemService {
-  create(createListItemInput: CreateListItemInput) {
-    return 'This action adds a new listItem';
+  constructor(
+    @InjectRepository(ListItem)
+    private readonly listItemsRepository: Repository<ListItem>,
+  ) {}
+
+  async create(createListItemInput: CreateListItemInput): Promise<ListItem> {
+    const { itemId, listId, ...rest } = createListItemInput;
+
+    const newListItem = this.listItemsRepository.create({
+      ...rest,
+      item: { id: itemId },
+      list: { id: listId },
+    });
+
+    await this.listItemsRepository.save(newListItem);
+
+    return this.findOne(newListItem.id);
   }
 
   findAll() {
     return `This action returns all listItem`;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} listItem`;
+  async findOne(id: string): Promise<ListItem> {
+    const listItem = await this.listItemsRepository.findOneBy({ id });
+
+    if (!listItem)
+      throw new NotFoundException(`List item with id ${id} not found`);
+
+    return listItem;
   }
 
   update(id: number, updateListItemInput: UpdateListItemInput) {
